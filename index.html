@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex" />
+<title>Bélgica · Mercados de Natal · 3–9 Dez 2026</title>
+<style>
+  :root{
+    --bg:#f6f4ef; --card:#ffffff; --ink:#1f2430; --muted:#6b7280;
+    --line:#e6e2d8; --accent:#1f6feb; --accent2:#b42318;
+    --holly:#1f7a4d; --gold:#b8860b;
+    --todo-bg:#fff4e5; --todo-ink:#b25e00; --todo-line:#f0c48a;
+    --ok-bg:#e8f6ee; --ok-ink:#1f7a4d; --ok-line:#a6dcbd;
+    --hotel-bg:#eef3fb; --hotel-line:#c7d8f3;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 18px rgba(20,24,40,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14161c; --card:#1c2029; --ink:#e8eaf0; --muted:#9aa3b2;
+      --line:#2b303b; --accent:#5a9bff; --accent2:#ff6b5e;
+      --todo-bg:#2a2112; --todo-ink:#f0b464; --todo-line:#4a3a1c;
+      --ok-bg:#12241a; --ok-ink:#6fd49b; --ok-line:#214b34;
+      --hotel-bg:#18202e; --hotel-line:#2c3c57;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:24px 18px 80px}
+  header.top{margin-bottom:18px}
+  h1{font-size:26px; margin:0 0 4px; letter-spacing:-.02em}
+  .sub{color:var(--muted); margin:0 0 2px}
+  .flags{font-size:20px; letter-spacing:2px}
+  .toolbar{
+    display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 8px;
+    position:sticky; top:0; background:var(--bg); padding:10px 0; z-index:5;
+    border-bottom:1px solid var(--line);
+  }
+  button{font:inherit; cursor:pointer}
+  .btn{
+    border:1px solid var(--line); background:var(--card); color:var(--ink);
+    padding:7px 12px; border-radius:9px; box-shadow:var(--shadow);
+  }
+  .btn:hover{border-color:var(--accent)}
+  .btn.warn:hover{border-color:var(--accent2); color:var(--accent2)}
+  .saved{margin-left:auto; color:var(--muted); font-size:13px; align-self:center}
+  .note{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; color:var(--muted); font-size:13.5px; box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+  /* Booking summary */
+  .summary{
+    background:var(--todo-bg); border:1px solid var(--todo-line); border-radius:12px;
+    padding:12px 14px; margin-bottom:18px; box-shadow:var(--shadow);
+  }
+  .summary h2{font-size:15px; margin:0 0 8px; color:var(--todo-ink); display:flex; align-items:center; gap:8px}
+  .summary .count{background:var(--todo-ink); color:#fff; border-radius:999px; padding:1px 9px; font-size:12.5px}
+  .summary ul{margin:0; padding-left:2px; list-style:none}
+  .summary li{padding:3px 0; font-size:14px; border-bottom:1px dashed var(--todo-line)}
+  .summary li:last-child{border-bottom:0}
+  .summary li .d{color:var(--todo-ink); font-weight:600}
+  .summary .empty{color:var(--ok-ink); font-size:14px}
+  /* Day card */
+  .day{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); margin-bottom:16px; overflow:hidden;
+  }
+  .day > .dhead{
+    display:flex; align-items:baseline; gap:10px; padding:12px 16px;
+    border-bottom:1px solid var(--line); background:linear-gradient(0deg,transparent,rgba(31,122,77,.04));
+  }
+  .dhead .dow{font-weight:700}
+  .dhead .date{color:var(--muted)}
+  .dhead .city{margin-left:auto; font-weight:600; color:var(--holly)}
+  .acts{padding:6px 10px 10px}
+  .act{
+    display:grid; grid-template-columns:62px 1fr auto; gap:8px; align-items:start;
+    padding:8px 6px; border-bottom:1px solid var(--line);
+  }
+  .act:last-child{border-bottom:0}
+  .act.hotel{background:var(--hotel-bg); border-radius:10px; border-bottom:1px solid var(--hotel-line)}
+  .time{
+    width:100%; border:1px solid transparent; background:transparent; color:var(--ink);
+    font-variant-numeric:tabular-nums; font-weight:600; padding:4px 5px; border-radius:7px; text-align:center;
+  }
+  .time:hover,.time:focus{border-color:var(--line); background:var(--bg); outline:none}
+  .txt{
+    padding:4px 6px; border:1px solid transparent; border-radius:7px; min-height:1.6em;
+  }
+  .txt:hover{border-color:var(--line)}
+  .txt:focus{border-color:var(--accent); background:var(--bg); outline:none}
+  .act .right{display:flex; align-items:center; gap:6px; white-space:nowrap}
+  .badge{
+    border:1px solid var(--line); background:var(--bg); color:var(--muted);
+    border-radius:999px; padding:3px 9px; font-size:12px; cursor:pointer; user-select:none;
+  }
+  .badge.todo{background:var(--todo-bg); color:var(--todo-ink); border-color:var(--todo-line); font-weight:600}
+  .badge.booked{background:var(--ok-bg); color:var(--ok-ink); border-color:var(--ok-line); font-weight:600}
+  .mini{
+    border:1px solid var(--line); background:var(--card); color:var(--muted);
+    width:26px; height:26px; border-radius:7px; line-height:1; font-size:14px;
+  }
+  .mini:hover{color:var(--ink); border-color:var(--accent)}
+  .mini.del:hover{color:var(--accent2); border-color:var(--accent2)}
+  .addrow{padding:4px 8px 2px}
+  .add{
+    width:100%; border:1px dashed var(--line); background:transparent; color:var(--muted);
+    padding:8px; border-radius:9px;
+  }
+  .add:hover{border-color:var(--holly); color:var(--holly)}
+  footer{color:var(--muted); font-size:12.5px; text-align:center; margin-top:28px}
+  @media print{
+    .toolbar,.note,.mini,.add,.addrow{display:none!important}
+    .badge{cursor:default}
+    body{background:#fff}
+    .day,.summary{box-shadow:none; break-inside:avoid}
+  }
+  @media (max-width:520px){
+    .act{grid-template-columns:54px 1fr; }
+    .act .right{grid-column:1 / -1; justify-content:flex-start; padding-left:54px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="flags">🇧🇪 🎄</div>
+    <h1>Bélgica · Mercados de Natal</h1>
+    <p class="sub">Bruxelas · Antuérpia · Brugges · Gent — 3 a 9 de Dezembro de 2026 · 2 pessoas</p>
+  </header>
+
+  <div class="note">
+    ✏️ <b>Esta página é editável.</b> Clica em qualquer hora ou texto para mudar, usa <b>➕</b> para adicionar atividades e o botão de estado à direita para alternar
+    <span class="badge todo">To Do Booking</span> → <span class="badge booked">Reservado</span>. As alterações ficam guardadas <b>neste navegador</b>; usa <b>Exportar</b> para fazer backup ou passar para outro dispositivo.
+  </div>
+
+  <div class="toolbar">
+    <button class="btn" id="btnExport">⬇️ Exportar</button>
+    <button class="btn" id="btnImport">⬆️ Importar</button>
+    <button class="btn" id="btnPrint">🖨️ Imprimir / PDF</button>
+    <button class="btn warn" id="btnReset">↺ Repor plano original</button>
+    <input type="file" id="fileInput" accept="application/json" hidden />
+    <span class="saved" id="saved"></span>
+  </div>
+
+  <section class="summary" id="summary"></section>
+  <main id="days"></main>
+
+  <footer>
+    Feito com ♥ para a viagem · editável e guardado localmente · <span id="foot-updated"></span>
+  </footer>
+</div>
+
+<script>
+const KEY = "belgica-itinerary-v1";
+
+const DEFAULT = {
+  days: [
+    { id:"d1", dow:"Qui", date:"3 Dez", city:"Bruxelas", acts:[
+      {id:"d1a1", time:"20:45", text:"Aterragem em Charleroi (CRL)", booking:"none"},
+      {id:"d1a2", time:"21:30", text:"Shuttle Flibco CRL → Bruxelas-Midi (~55 min)", booking:"todo"},
+      {id:"d1a3", time:"22:45", text:"Check-in hotel + espreitar a Grand-Place iluminada (opcional)", booking:"none"},
+      {id:"d1h", time:"23:59", text:"🏨 Hotel em Bruxelas (noite 1) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d2", dow:"Sex", date:"4 Dez", city:"Bruxelas", acts:[
+      {id:"d2a1", time:"09:00", text:"💼 Trabalho (durante o dia)", booking:"none"},
+      {id:"d2a2", time:"17:00", text:"Grand-Place + espetáculo de som e luz", booking:"none"},
+      {id:"d2a3", time:"17:30", text:"Galeries Royales Saint-Hubert + Manneken Pis", booking:"none"},
+      {id:"d2a4", time:"18:30", text:"🎄 Mercado Winter Wonders (Bourse → Sainte-Catherine)", booking:"none"},
+      {id:"d2a5", time:"20:00", text:"Jantar: moules-frites + cerveja (Delirium / Moeder Lambic)", booking:"none"},
+      {id:"d2h", time:"23:59", text:"🏨 Hotel em Bruxelas (noite 2) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d3", dow:"Sáb", date:"5 Dez", city:"Antuérpia", acts:[
+      {id:"d3a1", time:"09:30", text:"Pequeno-almoço + check-out de Bruxelas", booking:"none"},
+      {id:"d3a2", time:"11:30", text:"Comboio Bruxelas → Antwerpen-Centraal (~45-50 min) · passe SNCB", booking:"todo"},
+      {id:"d3a3", time:"12:30", text:"Admirar a estação Centraal + largar malas no hotel", booking:"none"},
+      {id:"d3a4", time:"13:30", text:"Catedral de Nossa Senhora (Rubens) — fecha ~17h", booking:"none"},
+      {id:"d3a5", time:"15:00", text:"Grote Markt + Het Steen + vista do telhado do MAS", booking:"none"},
+      {id:"d3a6", time:"17:30", text:"🎄 Mercado Kerst in Antwerpen (Grote Markt + Groenplaats)", booking:"none"},
+      {id:"d3a7", time:"20:00", text:"Jantar + genebra (De Vagant)", booking:"none"},
+      {id:"d3h", time:"23:59", text:"🏨 Hotel em Antuérpia (noite 3) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d4", dow:"Dom", date:"6 Dez", city:"Brugges", acts:[
+      {id:"d4a1", time:"09:30", text:"Pequeno-almoço + check-out de Antuérpia", booking:"none"},
+      {id:"d4a2", time:"10:30", text:"Comboio direto Antuérpia → Brugges (~1h25) · passe SNCB", booking:"todo"},
+      {id:"d4a3", time:"12:30", text:"Largar malas no hotel", booking:"none"},
+      {id:"d4a4", time:"13:00", text:"Markt + subir o Belfort (torre)", booking:"none"},
+      {id:"d4a5", time:"14:30", text:"Burg + Basílica do Santo Sangue + Rozenhoedkaai", booking:"none"},
+      {id:"d4a6", time:"15:30", text:"Igreja de Nossa Senhora + Begijnhof + Minnewater", booking:"none"},
+      {id:"d4a7", time:"16:00", text:"Groeningemuseum (só hoje — 2ª feira fecha) — opcional", booking:"none"},
+      {id:"d4a8", time:"17:30", text:"🎄 Wintergloed: mercado no Markt + trilho de luzes", booking:"none"},
+      {id:"d4a9", time:"20:00", text:"Jantar + cerveja De Halve Maan (Brugse Zot)", booking:"none"},
+      {id:"d4h", time:"23:59", text:"🏨 Hotel em Brugges (noite 4) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d5", dow:"Seg", date:"7 Dez", city:"Brugges", acts:[
+      {id:"d5a1", time:"09:00", text:"💼 Trabalho (durante o dia, a partir de Brugges)", booking:"none"},
+      {id:"d5a2", time:"17:00", text:"Trilho de luzes Wintergloed (o que faltou)", booking:"none"},
+      {id:"d5a3", time:"18:00", text:"Begijnhof + Minnewater à noite", booking:"none"},
+      {id:"d5a4", time:"20:00", text:"Jantar tranquilo + glühwein no mercado", booking:"none"},
+      {id:"d5h", time:"23:59", text:"🏨 Hotel em Brugges (noite 5) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d6", dow:"Ter", date:"8 Dez", city:"Gent → Bruxelas", acts:[
+      {id:"d6a1", time:"09:30", text:"Check-out de Brugges", booking:"none"},
+      {id:"d6a2", time:"10:00", text:"Comboio Brugges → Gent-Sint-Pieters (~25-30 min) · passe SNCB", booking:"todo"},
+      {id:"d6a3", time:"10:30", text:"Cacifo para malas na estação + tram 1 p/ o centro", booking:"none"},
+      {id:"d6a4", time:"11:00", text:"Catedral de São Bavão (Cordeiro Místico, Van Eyck)", booking:"none"},
+      {id:"d6a5", time:"12:30", text:"Gravensteen + Belfort + Ponte de São Miguel", booking:"none"},
+      {id:"d6a6", time:"15:00", text:"🎄 Mercado Gentse Winterfeesten + petiscos (cuberdons!)", booking:"none"},
+      {id:"d6a7", time:"17:00", text:"Graslei & Korenlei iluminados ao anoitecer", booking:"none"},
+      {id:"d6a8", time:"19:00", text:"Recolher malas + comboio Gent → Bruxelas (~30 min) · passe SNCB", booking:"todo"},
+      {id:"d6a9", time:"20:00", text:"Check-in último hotel + pagar a conta + fazer malas", booking:"none"},
+      {id:"d6h", time:"23:59", text:"🏨 Hotel em Bruxelas (noite 6) — reservar", booking:"todo", hotel:true},
+    ]},
+    { id:"d7", dow:"Qua", date:"9 Dez", city:"Partida", acts:[
+      {id:"d7a1", time:"02:30", text:"Acordar", booking:"none"},
+      {id:"d7a2", time:"03:00", text:"Táxi hotel → Bruxelas-Midi (metro não circula)", booking:"none"},
+      {id:"d7a3", time:"03:30", text:"Shuttle Flibco Midi → CRL (~55 min) — confirmar 1º serviço", booking:"todo"},
+      {id:"d7a4", time:"05:40", text:"Check-in / bagagem fecha", booking:"none"},
+      {id:"d7a5", time:"06:20", text:"✈️ Voo de partida (Charleroi)", booking:"none"},
+    ]},
+  ]
+};
+
+let state = load();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return structuredClone(DEFAULT);
+}
+function save(){
+  state.updated = new Date().toISOString();
+  localStorage.setItem(KEY, JSON.stringify(state));
+  flashSaved();
+  renderUpdated();
+}
+let savedTimer;
+function flashSaved(){
+  const el = document.getElementById("saved");
+  el.textContent = "✓ guardado";
+  clearTimeout(savedTimer);
+  savedTimer = setTimeout(()=>{ el.textContent=""; }, 1500);
+}
+function renderUpdated(){
+  const f = document.getElementById("foot-updated");
+  if(state.updated){
+    const d = new Date(state.updated);
+    f.textContent = "última edição: " + d.toLocaleString("pt-PT");
+  } else { f.textContent = ""; }
+}
+function uid(){ return "x"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+function findAct(id){
+  for(const day of state.days){
+    const i = day.acts.findIndex(a=>a.id===id);
+    if(i>=0) return {day, i, act:day.acts[i]};
+  }
+  return null;
+}
+
+function cycle(b){ return b==="none" ? "todo" : b==="todo" ? "booked" : "none"; }
+function badgeLabel(b){ return b==="todo" ? "To Do Booking" : b==="booked" ? "Reservado" : "—"; }
+
+/* ---------- rendering ---------- */
+function render(){
+  renderSummary();
+  const root = document.getElementById("days");
+  root.innerHTML = "";
+  for(const day of state.days){
+    const card = document.createElement("section");
+    card.className = "day";
+
+    const head = document.createElement("div");
+    head.className = "dhead";
+    head.innerHTML = `<span class="dow">${esc(day.dow)}</span><span class="date">${esc(day.date)}</span><span class="city">${esc(day.city)}</span>`;
+    card.appendChild(head);
+
+    const acts = document.createElement("div");
+    acts.className = "acts";
+    for(const a of day.acts){
+      acts.appendChild(renderAct(a));
+    }
+    card.appendChild(acts);
+
+    const addrow = document.createElement("div");
+    addrow.className = "addrow";
+    const add = document.createElement("button");
+    add.className = "add";
+    add.textContent = "➕ Adicionar atividade";
+    add.onclick = ()=>{
+      const na = {id:uid(), time:"12:00", text:"Nova atividade", booking:"none"};
+      day.acts.push(na);
+      save(); render();
+      // focus the new text
+      const el = document.querySelector(`[data-txt="${na.id}"]`);
+      if(el){ el.focus(); document.getSelection().selectAllChildren(el); }
+    };
+    addrow.appendChild(add);
+    card.appendChild(addrow);
+
+    root.appendChild(card);
+  }
+  renderUpdated();
+}
+
+function renderAct(a){
+  const row = document.createElement("div");
+  row.className = "act" + (a.hotel ? " hotel" : "");
+  row.dataset.actRow = a.id;
+
+  const time = document.createElement("input");
+  time.className = "time";
+  time.value = a.time || "";
+  time.setAttribute("aria-label","Hora");
+  time.addEventListener("input", ()=>{ a.time = time.value; save(); });
+  row.appendChild(time);
+
+  const txt = document.createElement("div");
+  txt.className = "txt";
+  txt.contentEditable = "true";
+  txt.spellcheck = false;
+  txt.dataset.txt = a.id;
+  txt.textContent = a.text || "";
+  txt.addEventListener("input", ()=>{ a.text = txt.innerText; save(); });
+  row.appendChild(txt);
+
+  const right = document.createElement("div");
+  right.className = "right";
+
+  const badge = document.createElement("button");
+  badge.className = "badge " + a.booking;
+  badge.textContent = badgeLabel(a.booking);
+  badge.title = "Alternar estado de reserva";
+  badge.onclick = ()=>{ a.booking = cycle(a.booking); save(); render(); };
+  right.appendChild(badge);
+
+  const up = mini("↑","Subir"); up.onclick = ()=>move(a.id,-1);
+  const down = mini("↓","Descer"); down.onclick = ()=>move(a.id,1);
+  const del = mini("✕","Remover"); del.classList.add("del");
+  del.onclick = ()=>{ const f=findAct(a.id); if(f){ f.day.acts.splice(f.i,1); save(); render(); } };
+  right.appendChild(up); right.appendChild(down); right.appendChild(del);
+
+  row.appendChild(right);
+  return row;
+}
+function mini(label,title){
+  const b=document.createElement("button"); b.className="mini"; b.textContent=label; b.title=title; return b;
+}
+function move(id,dir){
+  const f=findAct(id); if(!f) return;
+  const j=f.i+dir;
+  if(j<0||j>=f.day.acts.length) return;
+  const arr=f.day.acts; [arr[f.i],arr[j]]=[arr[j],arr[f.i]];
+  save(); render();
+}
+
+function renderSummary(){
+  const box = document.getElementById("summary");
+  const todos = [];
+  for(const day of state.days)
+    for(const a of day.acts)
+      if(a.booking==="todo") todos.push({day, a});
+  if(todos.length===0){
+    box.innerHTML = `<h2>✅ Reservas</h2><div class="empty">Tudo marcado como reservado. Boa viagem! 🎄</div>`;
+    return;
+  }
+  let html = `<h2>🧾 To Do Booking <span class="count">${todos.length}</span></h2><ul>`;
+  for(const {day,a} of todos){
+    html += `<li><span class="d">${esc(day.dow)} ${esc(day.date)}</span> · ${esc(a.time)} — ${esc(a.text)}</li>`;
+  }
+  html += `</ul>`;
+  box.innerHTML = html;
+}
+
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+/* ---------- toolbar ---------- */
+document.getElementById("btnReset").onclick = ()=>{
+  if(confirm("Repor o plano original? Perdes todas as edições feitas neste navegador.")){
+    state = structuredClone(DEFAULT); save(); render();
+  }
+};
+document.getElementById("btnExport").onclick = ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "itinerario-belgica-2026.json"; a.click();
+  URL.revokeObjectURL(url);
+};
+document.getElementById("btnImport").onclick = ()=> document.getElementById("fileInput").click();
+document.getElementById("fileInput").onchange = (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const data = JSON.parse(r.result);
+      if(!data || !Array.isArray(data.days)) throw new Error("formato inválido");
+      state = data; save(); render();
+      alert("Importado com sucesso ✓");
+    }catch(err){ alert("Ficheiro inválido: "+err.message); }
+    e.target.value = "";
+  };
+  r.readAsText(file);
+};
+document.getElementById("btnPrint").onclick = ()=> window.print();
+
+render();
+</script>
+</body>
+</html>
