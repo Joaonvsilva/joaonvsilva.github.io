@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex" />
 <title>Bélgica · Mercados de Natal · 3–9 Dez 2026</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --bg:#f6f4ef; --card:#ffffff; --ink:#1f2430; --muted:#6b7280;
@@ -38,7 +40,7 @@
   .flags{font-size:20px; letter-spacing:2px}
   .toolbar{
     display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 8px;
-    position:sticky; top:0; background:var(--bg); padding:10px 0; z-index:5;
+    position:sticky; top:0; background:var(--bg); padding:10px 0; z-index:20;
     border-bottom:1px solid var(--line);
   }
   button{font:inherit; cursor:pointer}
@@ -66,6 +68,27 @@
   .summary li:last-child{border-bottom:0}
   .summary li .d{color:var(--todo-ink); font-weight:600}
   .summary .empty{color:var(--ok-ink); font-size:14px}
+  /* Map */
+  .mapsec{
+    position:relative; z-index:0;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); margin-bottom:18px; padding:12px 14px;
+  }
+  .mapsec h2{font-size:15px; margin:0 0 8px; display:flex; align-items:center; gap:8px}
+  .mapbtns{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px}
+  .mapbtns button{
+    border:1px solid var(--line); background:var(--bg); color:var(--ink);
+    padding:5px 11px; border-radius:999px; font-size:13px;
+  }
+  .mapbtns button:hover{border-color:var(--accent)}
+  .mapbtns button.on{background:var(--ink); color:var(--card); border-color:var(--ink)}
+  #map{height:430px; border-radius:12px; overflow:hidden; border:1px solid var(--line)}
+  .leaflet-container{font:inherit}
+  .maplegend{display:flex; flex-wrap:wrap; gap:14px; margin-top:10px; font-size:13px; color:var(--muted)}
+  .maplegend span{display:inline-flex; align-items:center; gap:6px}
+  .dot{width:12px; height:12px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+  .dot.bru{background:#b42318} .dot.ant{background:#1f6feb} .dot.brg{background:#1f7a4d}
+  .dot.gen{background:#b8860b} .dot.tr{background:#6b7280}
   /* Day card */
   .day{
     background:var(--card); border:1px solid var(--line); border-radius:14px;
@@ -150,6 +173,26 @@
   </div>
 
   <section class="summary" id="summary"></section>
+
+  <section class="mapsec">
+    <h2>🗺️ Mapa dos pontos</h2>
+    <div class="mapbtns" id="mapbtns">
+      <button data-city="all" class="on">Todos</button>
+      <button data-city="brussels">Bruxelas</button>
+      <button data-city="antwerp">Antuérpia</button>
+      <button data-city="bruges">Brugges</button>
+      <button data-city="ghent">Gent</button>
+    </div>
+    <div id="map"></div>
+    <div class="maplegend">
+      <span><i class="dot bru"></i>Bruxelas</span>
+      <span><i class="dot ant"></i>Antuérpia</span>
+      <span><i class="dot brg"></i>Brugges</span>
+      <span><i class="dot gen"></i>Gent</span>
+      <span><i class="dot tr"></i>Transporte</span>
+    </div>
+  </section>
+
   <main id="days"></main>
 
   <footer>
@@ -413,6 +456,76 @@ document.getElementById("fileInput").onchange = (e)=>{
 document.getElementById("btnPrint").onclick = ()=> window.print();
 
 render();
+</script>
+
+<script>
+/* ---------- Mapa (estático, pontos mencionados no plano) ---------- */
+(function(){
+  if(!window.L){ return; }
+  const COLORS={brussels:"#b42318",antwerp:"#1f6feb",bruges:"#1f7a4d",ghent:"#b8860b",transport:"#6b7280"};
+  const CENTER={brussels:[50.8467,4.3525],antwerp:[51.2206,4.4009],bruges:[51.2085,3.2247],ghent:[51.0540,3.7250]};
+  const POIS=[
+    // Bruxelas
+    {city:"brussels", name:"Grand-Place", day:"Sex 4 Dez", lat:50.8467, lng:4.3525},
+    {city:"brussels", name:"Galeries Royales Saint-Hubert", day:"Sex 4 Dez", lat:50.8486, lng:4.3539},
+    {city:"brussels", name:"Manneken Pis", day:"Sex 4 Dez", lat:50.8449, lng:4.3499},
+    {city:"brussels", name:"Mercado Winter Wonders (Bourse → Sainte-Catherine)", day:"Sex 4 Dez", lat:50.8500, lng:4.3481},
+    {city:"brussels", name:"Delirium Café", day:"Sex 4 Dez", lat:50.8479, lng:4.3541},
+    {city:"brussels", name:"Bruxelas-Midi (estação / shuttle)", day:"Qui 3 · Qua 9", lat:50.8358, lng:4.3365, transport:true},
+    {city:"brussels", name:"Aeroporto de Charleroi (CRL)", day:"Qui 3 · Qua 9", lat:50.4592, lng:4.4525, transport:true, skipBounds:true},
+    // Antuérpia
+    {city:"antwerp", name:"Antwerpen-Centraal (estação-catedral)", day:"Sáb 5 Dez", lat:51.2172, lng:4.4210},
+    {city:"antwerp", name:"Catedral de Nossa Senhora (Rubens)", day:"Sáb 5 Dez", lat:51.2206, lng:4.4011},
+    {city:"antwerp", name:"Grote Markt", day:"Sáb 5 Dez", lat:51.2217, lng:4.3997},
+    {city:"antwerp", name:"Het Steen", day:"Sáb 5 Dez", lat:51.2230, lng:4.3972},
+    {city:"antwerp", name:"MAS (vista do telhado)", day:"Sáb 5 Dez", lat:51.2290, lng:4.4055},
+    {city:"antwerp", name:"Mercado Kerst in Antwerpen (Groenplaats)", day:"Sáb 5 Dez", lat:51.2193, lng:4.4009},
+    {city:"antwerp", name:"De Vagant (genebra)", day:"Sáb 5 Dez", lat:51.2189, lng:4.3986},
+    // Brugges
+    {city:"bruges", name:"Markt + Belfort", day:"Dom 6 Dez", lat:51.2085, lng:3.2247},
+    {city:"bruges", name:"Burg + Basílica do Santo Sangue", day:"Dom 6 Dez", lat:51.2089, lng:3.2278},
+    {city:"bruges", name:"Rozenhoedkaai", day:"Dom 6 Dez", lat:51.2076, lng:3.2270},
+    {city:"bruges", name:"Igreja de Nossa Senhora", day:"Dom 6 Dez", lat:51.2042, lng:3.2244},
+    {city:"bruges", name:"Begijnhof", day:"Dom 6 Dez", lat:51.2019, lng:3.2238},
+    {city:"bruges", name:"Minnewater (Lago do Amor)", day:"Dom 6 Dez", lat:51.2008, lng:3.2252},
+    {city:"bruges", name:"Groeningemuseum", day:"Dom 6 Dez", lat:51.2053, lng:3.2262},
+    {city:"bruges", name:"Wintergloed (Markt / Simon Stevinplein)", day:"Dom 6 · Seg 7", lat:51.2072, lng:3.2239},
+    {city:"bruges", name:"Cervejaria De Halve Maan", day:"Dom 6 Dez", lat:51.2031, lng:3.2229},
+    // Gent
+    {city:"ghent", name:"Gent-Sint-Pieters (estação)", day:"Ter 8 Dez", lat:51.0356, lng:3.7106, transport:true},
+    {city:"ghent", name:"Catedral de São Bavão (Van Eyck)", day:"Ter 8 Dez", lat:51.0530, lng:3.7276},
+    {city:"ghent", name:"Gravensteen", day:"Ter 8 Dez", lat:51.0574, lng:3.7206},
+    {city:"ghent", name:"Belfort de Gent", day:"Ter 8 Dez", lat:51.0536, lng:3.7251},
+    {city:"ghent", name:"Ponte de São Miguel", day:"Ter 8 Dez", lat:51.0540, lng:3.7207},
+    {city:"ghent", name:"Graslei & Korenlei", day:"Ter 8 Dez", lat:51.0553, lng:3.7201},
+    {city:"ghent", name:"Mercado Gentse Winterfeesten", day:"Ter 8 Dez", lat:51.0535, lng:3.7263},
+  ];
+
+  const map = L.map("map",{scrollWheelZoom:false}).setView([50.9,4.0],8);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+    maxZoom:19, attribution:'&copy; OpenStreetMap'
+  }).addTo(map);
+
+  const bounds=[];
+  POIS.forEach(p=>{
+    const color = p.transport ? COLORS.transport : COLORS[p.city];
+    const m = L.circleMarker([p.lat,p.lng],{radius:8,weight:2,color:"#fff",fillColor:color,fillOpacity:1});
+    m.bindPopup("<b>"+p.name+"</b><br>"+p.day);
+    m.addTo(map);
+    if(!p.skipBounds) bounds.push([p.lat,p.lng]);
+  });
+  function showAll(){ map.fitBounds(bounds,{padding:[30,30]}); }
+  showAll();
+
+  document.getElementById("mapbtns").addEventListener("click",function(e){
+    const b = e.target.closest("button"); if(!b) return;
+    document.querySelectorAll("#mapbtns button").forEach(x=>x.classList.toggle("on",x===b));
+    const c = b.dataset.city;
+    if(c==="all") showAll(); else map.flyTo(CENTER[c],14);
+  });
+
+  setTimeout(()=>map.invalidateSize(),250);
+})();
 </script>
 </body>
 </html>
