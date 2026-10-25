@@ -50,7 +50,23 @@
   }
   .btn:hover{border-color:var(--accent)}
   .btn.warn:hover{border-color:var(--accent2); color:var(--accent2)}
-  .saved{margin-left:auto; color:var(--muted); font-size:13px; align-self:center}
+  .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+  .btn.primary:hover{filter:brightness(1.07); border-color:var(--accent)}
+  .btn:disabled{opacity:.6; cursor:default}
+  .status{margin-left:auto; align-self:center; font-size:13px; padding:2px 10px; border-radius:999px}
+  .status.ok{color:var(--ok-ink)}
+  .status.dirty{color:var(--todo-ink); font-weight:600}
+  .status.saving{color:var(--muted)}
+  .saved{color:var(--muted); font-size:13px; align-self:center}
+  .ghpanel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px; margin-bottom:16px; box-shadow:var(--shadow); font-size:14px;
+  }
+  .ghpanel p{margin:0 0 8px}
+  .ghpanel a{color:var(--accent)}
+  .ghrow{display:flex; flex-wrap:wrap; gap:8px}
+  .ghrow input{flex:1 1 260px; min-width:0; padding:8px 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); color:var(--ink); font:inherit}
+  .ghmsg{margin-top:8px; font-size:13px; color:var(--muted)}
   .note{
     background:var(--card); border:1px solid var(--line); border-radius:12px;
     padding:12px 14px; color:var(--muted); font-size:13.5px; box-shadow:var(--shadow);
@@ -159,17 +175,32 @@
   </header>
 
   <div class="note">
-    ✏️ <b>Esta página é editável.</b> Clica em qualquer hora ou texto para mudar, usa <b>➕</b> para adicionar atividades e o botão de estado à direita para alternar
-    <span class="badge todo">To Do Booking</span> → <span class="badge booked">Reservado</span>. As alterações ficam guardadas <b>neste navegador</b>; usa <b>Exportar</b> para fazer backup ou passar para outro dispositivo.
+    ✏️ <b>Página editável.</b> Clica na hora ou no texto para mudar, <b>➕</b> adiciona atividades e o botão à direita alterna
+    <span class="badge todo">To Do Booking</span> → <span class="badge booked">Reservado</span>.
+    As edições guardam-se neste dispositivo; carrega em <b>💾 Guardar no GitHub</b> para gravar online e partilhar (é preciso ligar o GitHub uma vez por dispositivo).
   </div>
 
   <div class="toolbar">
+    <button class="btn primary" id="btnSave">💾 Guardar no GitHub</button>
+    <button class="btn" id="btnGh">⚙️ Ligar GitHub</button>
     <button class="btn" id="btnExport">⬇️ Exportar</button>
     <button class="btn" id="btnImport">⬆️ Importar</button>
-    <button class="btn" id="btnPrint">🖨️ Imprimir / PDF</button>
-    <button class="btn warn" id="btnReset">↺ Repor plano original</button>
+    <button class="btn" id="btnPrint">🖨️ PDF</button>
+    <button class="btn warn" id="btnReset">↺ Repor</button>
     <input type="file" id="fileInput" accept="application/json" hidden />
+    <span class="status" id="status"></span>
     <span class="saved" id="saved"></span>
+  </div>
+
+  <div class="ghpanel" id="ghpanel" hidden>
+    <p>Para guardar online, cola um <b>token fino do GitHub</b> (fine-grained PAT) com acesso <b>só ao repositório joaonvsilva.github.io</b> e permissão <b>Contents: Read and write</b>. Fica guardado só neste dispositivo — nunca é publicado.</p>
+    <p><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Criar token no GitHub →</a></p>
+    <div class="ghrow">
+      <input type="password" id="ghtoken" placeholder="github_pat_…" autocomplete="off" spellcheck="false" />
+      <button class="btn" id="btnGhSave">Guardar token</button>
+      <button class="btn warn" id="btnGhForget">Esquecer</button>
+    </div>
+    <div class="ghmsg" id="ghmsg"></div>
   </div>
 
   <section class="summary" id="summary"></section>
@@ -196,7 +227,7 @@
   <main id="days"></main>
 
   <footer>
-    Feito com ♥ para a viagem · editável e guardado localmente · <span id="foot-updated"></span>
+    Feito com ♥ para a viagem · editável e guardado no GitHub · <span id="foot-updated"></span>
   </footer>
 </div>
 
@@ -270,30 +301,117 @@ const DEFAULT = {
   ]
 };
 
-let state = load();
+const LS_DATA = KEY;
+const LS_DIRTY = KEY + ":dirty";
+const LS_TOKEN = "belgica-gh-token";
+const REPO = { owner:"Joaonvsilva", name:"joaonvsilva.github.io", path:"belgica/data.json", branch:"main" };
 
-function load(){
-  try{
-    const raw = localStorage.getItem(KEY);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  return structuredClone(DEFAULT);
+let state = structuredClone(DEFAULT);
+let dirty = false;
+
+function saveLocal(){
+  localStorage.setItem(LS_DATA, JSON.stringify(state));
+  localStorage.setItem(LS_DIRTY, dirty ? "1" : "0");
 }
-function save(){
+function save(){   // chamado em cada edição local
   state.updated = new Date().toISOString();
-  localStorage.setItem(KEY, JSON.stringify(state));
-  flashSaved();
+  dirty = true;
+  saveLocal();
+  renderStatus();
   renderUpdated();
 }
+
+async function init(){
+  let remote = null;
+  try{
+    const r = await fetch("data.json?t=" + Date.now(), {cache:"no-store"});
+    if(r.ok) remote = await r.json();
+  }catch(e){}
+  let draft = null;
+  try{ const raw = localStorage.getItem(LS_DATA); if(raw) draft = JSON.parse(raw); }catch(e){}
+  const draftDirty = localStorage.getItem(LS_DIRTY) === "1";
+  const rU = (remote && remote.updated) || "";
+  const dU = (draft && draft.updated) || "";
+
+  if(draft && Array.isArray(draft.days) && dU > rU){
+    state = draft; dirty = draftDirty;              // local mais recente (edições por guardar, ou guardado ainda a propagar)
+  } else if(remote && Array.isArray(remote.days)){
+    state = remote; dirty = false; saveLocal();     // versão publicada é a verdade
+  } else if(draft && Array.isArray(draft.days)){
+    state = draft; dirty = draftDirty;
+  } else {
+    state = structuredClone(DEFAULT); dirty = false;
+  }
+  render(); renderStatus(); renderUpdated();
+}
+
+function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
+function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
+
+async function pushToGitHub(){
+  const token = getToken();
+  if(!token){ openGh(true); setGhMsg("Liga primeiro o GitHub: cola um token aqui."); return; }
+  const btn = document.getElementById("btnSave");
+  btn.disabled = true; setStatus("saving","A guardar no GitHub…");
+  try{
+    const api = "https://api.github.com/repos/" + REPO.owner + "/" + REPO.name + "/contents/" + encodeURIComponent(REPO.path);
+    const H = { "Authorization":"Bearer " + token, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28" };
+    let sha = null;
+    const g = await fetch(api + "?ref=" + REPO.branch, { headers:H, cache:"no-store" });
+    if(g.ok){ sha = (await g.json()).sha; }
+    else if(g.status === 401){ throw new Error("token inválido ou expirado (401)"); }
+    else if(g.status === 403){ throw new Error("sem permissão (403) — o token precisa de 'Contents: Read and write' neste repositório"); }
+    else if(g.status !== 404){ throw new Error("GET " + g.status); }
+    const payload = { days: state.days, updated: new Date().toISOString() };
+    const body = { message:"Atualizar itinerário (via página)", content: b64(JSON.stringify(payload, null, 2)), branch: REPO.branch };
+    if(sha) body.sha = sha;
+    const p = await fetch(api, { method:"PUT", headers:H, body: JSON.stringify(body) });
+    if(!p.ok){
+      let d=""; try{ d = (await p.json()).message || ""; }catch(e){}
+      throw new Error("PUT " + p.status + (d ? " — " + d : ""));
+    }
+    state.updated = payload.updated; dirty = false; saveLocal();
+    renderStatus(); renderUpdated(); flashSaved("✓ guardado no GitHub");
+  }catch(e){
+    setStatus("dirty", "");
+    renderStatus();
+    alert("Não consegui guardar no GitHub:\n\n" + e.message + "\n\nConfirma que o token é fine-grained, com acesso ao repositório joaonvsilva.github.io e permissão 'Contents: Read and write'. Depois de guardar, pode demorar ~1 min até a versão publicada atualizar para a outra pessoa.");
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+/* indicadores */
 let savedTimer;
-function flashSaved(){
+function flashSaved(msg){
   const el = document.getElementById("saved");
-  el.textContent = "✓ guardado";
+  el.textContent = msg || "✓ guardado";
   clearTimeout(savedTimer);
-  savedTimer = setTimeout(()=>{ el.textContent=""; }, 1500);
+  savedTimer = setTimeout(()=>{ el.textContent=""; }, 2200);
+}
+function setStatus(kind, text){
+  const el = document.getElementById("status");
+  if(!el) return;
+  el.className = "status " + (kind || "");
+  if(text != null) el.textContent = text;
+}
+function renderStatus(){
+  const el = document.getElementById("status");
+  if(!el) return;
+  const hasToken = !!getToken();
+  if(dirty){
+    el.className = "status dirty";
+    el.textContent = hasToken ? "● alterações por guardar" : "● só local — liga o GitHub p/ gravar online";
+  } else {
+    el.className = "status ok";
+    el.textContent = hasToken ? "✓ guardado no GitHub" : "✓ a ver versão publicada";
+  }
+  const gb = document.getElementById("btnGh");
+  if(gb) gb.textContent = hasToken ? "⚙️ GitHub ligado ✓" : "⚙️ Ligar GitHub";
 }
 function renderUpdated(){
   const f = document.getElementById("foot-updated");
+  if(!f) return;
   if(state.updated){
     const d = new Date(state.updated);
     f.textContent = "última edição: " + d.toLocaleString("pt-PT");
@@ -455,7 +573,30 @@ document.getElementById("fileInput").onchange = (e)=>{
 };
 document.getElementById("btnPrint").onclick = ()=> window.print();
 
-render();
+/* ---------- GitHub ---------- */
+function openGh(force){
+  const p = document.getElementById("ghpanel");
+  const show = (force === undefined) ? p.hidden : force;
+  p.hidden = !show;
+}
+function setGhMsg(m){ const el = document.getElementById("ghmsg"); if(el) el.textContent = m || ""; }
+document.getElementById("btnSave").onclick = pushToGitHub;
+document.getElementById("btnGh").onclick = ()=> openGh();
+document.getElementById("btnGhSave").onclick = ()=>{
+  const t = document.getElementById("ghtoken").value.trim();
+  if(!t){ setGhMsg("Cola um token primeiro."); return; }
+  localStorage.setItem(LS_TOKEN, t);
+  document.getElementById("ghtoken").value = "";
+  setGhMsg("Token guardado neste dispositivo ✓ — já podes carregar em 💾 Guardar no GitHub.");
+  renderStatus();
+};
+document.getElementById("btnGhForget").onclick = ()=>{
+  localStorage.removeItem(LS_TOKEN);
+  setGhMsg("Token removido deste dispositivo.");
+  renderStatus();
+};
+
+init();
 </script>
 
 <script>

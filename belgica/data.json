@@ -1,0 +1,67 @@
+{
+  "updated": "2026-10-25T18:00:00.000Z",
+  "days": [
+    { "id": "d1", "dow": "Qui", "date": "3 Dez", "city": "Bruxelas", "acts": [
+      { "id": "d1a1", "time": "20:45", "text": "Aterragem em Charleroi (CRL)", "booking": "none" },
+      { "id": "d1a2", "time": "21:30", "text": "Shuttle Flibco CRL → Bruxelas-Midi (~55 min)", "booking": "todo" },
+      { "id": "d1a3", "time": "22:45", "text": "Check-in hotel + espreitar a Grand-Place iluminada (opcional)", "booking": "none" },
+      { "id": "d1h", "time": "23:59", "text": "🏨 Hotel em Bruxelas (noite 1) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d2", "dow": "Sex", "date": "4 Dez", "city": "Bruxelas", "acts": [
+      { "id": "d2a1", "time": "09:00", "text": "💼 Trabalho (durante o dia)", "booking": "none" },
+      { "id": "d2a2", "time": "17:00", "text": "Grand-Place + espetáculo de som e luz", "booking": "none" },
+      { "id": "d2a3", "time": "17:30", "text": "Galeries Royales Saint-Hubert + Manneken Pis", "booking": "none" },
+      { "id": "d2a4", "time": "18:30", "text": "🎄 Mercado Winter Wonders (Bourse → Sainte-Catherine)", "booking": "none" },
+      { "id": "d2a5", "time": "20:00", "text": "Jantar: moules-frites + cerveja (Delirium / Moeder Lambic)", "booking": "none" },
+      { "id": "d2h", "time": "23:59", "text": "🏨 Hotel em Bruxelas (noite 2) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d3", "dow": "Sáb", "date": "5 Dez", "city": "Antuérpia", "acts": [
+      { "id": "d3a1", "time": "09:30", "text": "Pequeno-almoço + check-out de Bruxelas", "booking": "none" },
+      { "id": "d3a2", "time": "11:30", "text": "Comboio Bruxelas → Antwerpen-Centraal (~45-50 min) · passe SNCB", "booking": "todo" },
+      { "id": "d3a3", "time": "12:30", "text": "Admirar a estação Centraal + largar malas no hotel", "booking": "none" },
+      { "id": "d3a4", "time": "13:30", "text": "Catedral de Nossa Senhora (Rubens) — fecha ~17h", "booking": "none" },
+      { "id": "d3a5", "time": "15:00", "text": "Grote Markt + Het Steen + vista do telhado do MAS", "booking": "none" },
+      { "id": "d3a6", "time": "17:30", "text": "🎄 Mercado Kerst in Antwerpen (Grote Markt + Groenplaats)", "booking": "none" },
+      { "id": "d3a7", "time": "20:00", "text": "Jantar + genebra (De Vagant)", "booking": "none" },
+      { "id": "d3h", "time": "23:59", "text": "🏨 Hotel em Antuérpia (noite 3) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d4", "dow": "Dom", "date": "6 Dez", "city": "Brugges", "acts": [
+      { "id": "d4a1", "time": "09:30", "text": "Pequeno-almoço + check-out de Antuérpia", "booking": "none" },
+      { "id": "d4a2", "time": "10:30", "text": "Comboio direto Antuérpia → Brugges (~1h25) · passe SNCB", "booking": "todo" },
+      { "id": "d4a3", "time": "12:30", "text": "Largar malas no hotel", "booking": "none" },
+      { "id": "d4a4", "time": "13:00", "text": "Markt + subir o Belfort (torre)", "booking": "none" },
+      { "id": "d4a5", "time": "14:30", "text": "Burg + Basílica do Santo Sangue + Rozenhoedkaai", "booking": "none" },
+      { "id": "d4a6", "time": "15:30", "text": "Igreja de Nossa Senhora + Begijnhof + Minnewater", "booking": "none" },
+      { "id": "d4a7", "time": "16:00", "text": "Groeningemuseum (só hoje — 2ª feira fecha) — opcional", "booking": "none" },
+      { "id": "d4a8", "time": "17:30", "text": "🎄 Wintergloed: mercado no Markt + trilho de luzes", "booking": "none" },
+      { "id": "d4a9", "time": "20:00", "text": "Jantar + cerveja De Halve Maan (Brugse Zot)", "booking": "none" },
+      { "id": "d4h", "time": "23:59", "text": "🏨 Hotel em Brugges (noite 4) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d5", "dow": "Seg", "date": "7 Dez", "city": "Brugges", "acts": [
+      { "id": "d5a1", "time": "09:00", "text": "💼 Trabalho (durante o dia, a partir de Brugges)", "booking": "none" },
+      { "id": "d5a2", "time": "17:00", "text": "Trilho de luzes Wintergloed (o que faltou)", "booking": "none" },
+      { "id": "d5a3", "time": "18:00", "text": "Begijnhof + Minnewater à noite", "booking": "none" },
+      { "id": "d5a4", "time": "20:00", "text": "Jantar tranquilo + glühwein no mercado", "booking": "none" },
+      { "id": "d5h", "time": "23:59", "text": "🏨 Hotel em Brugges (noite 5) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d6", "dow": "Ter", "date": "8 Dez", "city": "Gent → Bruxelas", "acts": [
+      { "id": "d6a1", "time": "09:30", "text": "Check-out de Brugges", "booking": "none" },
+      { "id": "d6a2", "time": "10:00", "text": "Comboio Brugges → Gent-Sint-Pieters (~25-30 min) · passe SNCB", "booking": "todo" },
+      { "id": "d6a3", "time": "10:30", "text": "Cacifo para malas na estação + tram 1 p/ o centro", "booking": "none" },
+      { "id": "d6a4", "time": "11:00", "text": "Catedral de São Bavão (Cordeiro Místico, Van Eyck)", "booking": "none" },
+      { "id": "d6a5", "time": "12:30", "text": "Gravensteen + Belfort + Ponte de São Miguel", "booking": "none" },
+      { "id": "d6a6", "time": "15:00", "text": "🎄 Mercado Gentse Winterfeesten + petiscos (cuberdons!)", "booking": "none" },
+      { "id": "d6a7", "time": "17:00", "text": "Graslei & Korenlei iluminados ao anoitecer", "booking": "none" },
+      { "id": "d6a8", "time": "19:00", "text": "Recolher malas + comboio Gent → Bruxelas (~30 min) · passe SNCB", "booking": "todo" },
+      { "id": "d6a9", "time": "20:00", "text": "Check-in último hotel + pagar a conta + fazer malas", "booking": "none" },
+      { "id": "d6h", "time": "23:59", "text": "🏨 Hotel em Bruxelas (noite 6) — reservar", "booking": "todo", "hotel": true }
+    ]},
+    { "id": "d7", "dow": "Qua", "date": "9 Dez", "city": "Partida", "acts": [
+      { "id": "d7a1", "time": "02:30", "text": "Acordar", "booking": "none" },
+      { "id": "d7a2", "time": "03:00", "text": "Táxi hotel → Bruxelas-Midi (metro não circula)", "booking": "none" },
+      { "id": "d7a3", "time": "03:30", "text": "Shuttle Flibco Midi → CRL (~55 min) — confirmar 1º serviço", "booking": "todo" },
+      { "id": "d7a4", "time": "05:40", "text": "Check-in / bagagem fecha", "booking": "none" },
+      { "id": "d7a5", "time": "06:20", "text": "✈️ Voo de partida (Charleroi)", "booking": "none" }
+    ]}
+  ]
+}
