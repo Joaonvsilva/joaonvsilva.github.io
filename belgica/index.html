@@ -66,6 +66,7 @@
   .ghpanel a{color:var(--accent)}
   .ghrow{display:flex; flex-wrap:wrap; gap:8px}
   .ghrow input{flex:1 1 260px; min-width:0; padding:8px 10px; border:1px solid var(--line); border-radius:9px; background:var(--bg); color:var(--ink); font:inherit}
+  .ghauto{display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13.5px}
   .ghmsg{margin-top:8px; font-size:13px; color:var(--muted)}
   .note{
     background:var(--card); border:1px solid var(--line); border-radius:12px;
@@ -200,6 +201,7 @@
       <button class="btn" id="btnGhSave">Guardar token</button>
       <button class="btn warn" id="btnGhForget">Esquecer</button>
     </div>
+    <label class="ghauto"><input type="checkbox" id="ghauto" /> Guardar automaticamente no GitHub após cada alteração (recomendado)</label>
     <div class="ghmsg" id="ghmsg"></div>
   </div>
 
@@ -319,6 +321,7 @@ function save(){   // chamado em cada edição local
   saveLocal();
   renderStatus();
   renderUpdated();
+  scheduleAuto();
 }
 
 async function init(){
@@ -348,11 +351,27 @@ async function init(){
 function getToken(){ return localStorage.getItem(LS_TOKEN) || ""; }
 function b64(s){ return btoa(unescape(encodeURIComponent(s))); }
 
-async function pushToGitHub(){
+const LS_AUTO = "belgica-gh-auto";
+function autoEnabled(){ return localStorage.getItem(LS_AUTO) !== "0"; } // ligado por omissão
+let autoTimer = null, pushing = false;
+
+function scheduleAuto(){
+  if(!autoEnabled() || !getToken()) return;
+  clearTimeout(autoTimer);
+  autoTimer = setTimeout(runAuto, 4000); // grava ~4s depois da última alteração
+}
+async function runAuto(){
+  if(pushing){ autoTimer = setTimeout(runAuto, 1200); return; }
+  if(!dirty || !autoEnabled() || !getToken()) return;
+  try{ await commitToGitHub(); }catch(e){ /* estado já reflete a falha */ }
+}
+
+// Núcleo da gravação (sem alertas). Lança erro em caso de falha.
+async function commitToGitHub(){
   const token = getToken();
-  if(!token){ openGh(true); setGhMsg("Liga primeiro o GitHub: cola um token aqui."); return; }
-  const btn = document.getElementById("btnSave");
-  btn.disabled = true; setStatus("saving","A guardar no GitHub…");
+  if(!token){ const e=new Error("sem token"); e.noToken=true; throw e; }
+  pushing = true;
+  setStatus("saving", "A guardar no GitHub…");
   try{
     const api = "https://api.github.com/repos/" + REPO.owner + "/" + REPO.name + "/contents/" + encodeURIComponent(REPO.path);
     const H = { "Authorization":"Bearer " + token, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28" };
@@ -372,13 +391,23 @@ async function pushToGitHub(){
     }
     state.updated = payload.updated; dirty = false; saveLocal();
     renderStatus(); renderUpdated(); flashSaved("✓ guardado no GitHub");
-  }catch(e){
-    setStatus("dirty", "");
-    renderStatus();
-    alert("Não consegui guardar no GitHub:\n\n" + e.message + "\n\nConfirma que o token é fine-grained, com acesso ao repositório joaonvsilva.github.io e permissão 'Contents: Read and write'. Depois de guardar, pode demorar ~1 min até a versão publicada atualizar para a outra pessoa.");
-  }finally{
-    btn.disabled = false;
+  } finally {
+    pushing = false;
   }
+}
+
+// Botão manual: grava já e mostra alerta se falhar.
+async function manualSave(){
+  if(!getToken()){ openGh(true); setGhMsg("Liga primeiro o GitHub: cola um token aqui."); return; }
+  clearTimeout(autoTimer);
+  const btn = document.getElementById("btnSave");
+  btn.disabled = true;
+  try{ await commitToGitHub(); }
+  catch(e){
+    renderStatus();
+    if(!e.noToken) alert("Não consegui guardar no GitHub:\n\n" + e.message + "\n\nConfirma que o token é fine-grained, com acesso ao repositório joaonvsilva.github.io e permissão 'Contents: Read and write'. Depois de guardar, pode demorar ~1 min até a versão publicada atualizar para a outra pessoa.");
+  }
+  finally{ btn.disabled = false; }
 }
 
 /* indicadores */
@@ -404,7 +433,7 @@ function renderStatus(){
     el.textContent = hasToken ? "● alterações por guardar" : "● só local — liga o GitHub p/ gravar online";
   } else {
     el.className = "status ok";
-    el.textContent = hasToken ? "✓ guardado no GitHub" : "✓ a ver versão publicada";
+    el.textContent = hasToken ? (autoEnabled() ? "✓ guardado no GitHub (auto)" : "✓ guardado no GitHub") : "✓ a ver versão publicada";
   }
   const gb = document.getElementById("btnGh");
   if(gb) gb.textContent = hasToken ? "⚙️ GitHub ligado ✓" : "⚙️ Ligar GitHub";
@@ -580,7 +609,7 @@ function openGh(force){
   p.hidden = !show;
 }
 function setGhMsg(m){ const el = document.getElementById("ghmsg"); if(el) el.textContent = m || ""; }
-document.getElementById("btnSave").onclick = pushToGitHub;
+document.getElementById("btnSave").onclick = manualSave;
 document.getElementById("btnGh").onclick = ()=> openGh();
 document.getElementById("btnGhSave").onclick = ()=>{
   const t = document.getElementById("ghtoken").value.trim();
@@ -594,6 +623,14 @@ document.getElementById("btnGhForget").onclick = ()=>{
   localStorage.removeItem(LS_TOKEN);
   setGhMsg("Token removido deste dispositivo.");
   renderStatus();
+};
+const ghAuto = document.getElementById("ghauto");
+ghAuto.checked = autoEnabled();
+ghAuto.onchange = ()=>{
+  localStorage.setItem(LS_AUTO, ghAuto.checked ? "1" : "0");
+  setGhMsg(ghAuto.checked ? "Auto-gravação ligada ✓ (grava ~4s após cada alteração)." : "Auto-gravação desligada — usa 💾 Guardar no GitHub.");
+  renderStatus();
+  if(ghAuto.checked && dirty) scheduleAuto();
 };
 
 init();
