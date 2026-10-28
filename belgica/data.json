@@ -306,7 +306,7 @@
         {
           "id": "d6h",
           "time": "23:59",
-          "text": "🏨 Hotel em Bruxelas (noite 6) — reservar",
+          "text": "🏨 Hotel em Gent (noite 6) — reservar",
           "booking": "todo",
           "hotel": true
         }
@@ -351,5 +351,5 @@
       ]
     }
   ],
-  "updated": "2026-10-28T21:11:56.564Z"
+  "updated": "2026-10-28T21:12:30.366Z"
 }
