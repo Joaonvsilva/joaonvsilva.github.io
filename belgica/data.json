@@ -199,7 +199,7 @@
           "id": "d4h",
           "time": "23:59",
           "text": "🏨 Hotel em Brugges (noite 4) — reservar",
-          "booking": "todo",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -238,7 +238,7 @@
           "id": "d5h",
           "time": "23:59",
           "text": "🏨 Hotel em Brugges (noite 5) — reservar",
-          "booking": "todo",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-10-28T22:03:20.751Z"
+  "updated": "2026-10-28T23:05:53.806Z"
 }
