@@ -292,18 +292,6 @@
           "booking": "none"
         },
         {
-          "id": "d6a8",
-          "time": "19:00",
-          "text": "Recolher malas + comboio Gent → Bruxelas (~30 min) · passe SNCB",
-          "booking": "todo"
-        },
-        {
-          "id": "d6a9",
-          "time": "20:00",
-          "text": "Check-in último hotel ",
-          "booking": "none"
-        },
-        {
           "id": "d6h",
           "time": "23:59",
           "text": "🏨 Hotel em Gent (noite 6) — reservar",
@@ -351,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-10-28T21:27:11.544Z"
+  "updated": "2026-10-28T21:28:01.518Z"
 }
