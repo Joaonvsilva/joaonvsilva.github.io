@@ -334,7 +334,7 @@
           "id": "d7a3",
           "time": "03:30",
           "text": "Shuttle Flibco Midi → CRL (~55 min) — confirmar 1º serviço",
-          "booking": "todo"
+          "booking": "booked"
         },
         {
           "id": "d7a4",
@@ -351,5 +351,5 @@
       ]
     }
   ],
-  "updated": "2026-10-28T21:12:30.366Z"
+  "updated": "2026-10-28T21:27:11.544Z"
 }
