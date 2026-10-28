@@ -7,12 +7,6 @@
       "city": "Bruxelas",
       "acts": [
         {
-          "id": "xmvo4ikp8k6i3",
-          "time": "01:00",
-          "text": "Comprar passe SNBC - 10 viagens - 89e (2pax)",
-          "booking": "todo"
-        },
-        {
           "id": "d1a1",
           "time": "20:45",
           "text": "Aterragem em Charleroi (CRL)",
@@ -357,5 +351,5 @@
       ]
     }
   ],
-  "updated": "2026-10-25T18:40:57.560Z"
+  "updated": "2026-10-28T21:11:56.564Z"
 }
