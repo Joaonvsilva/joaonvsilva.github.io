@@ -28,7 +28,7 @@
           "id": "d1h",
           "time": "23:59",
           "text": "🏨 Hotel em Bruxelas (noite 1) — reservar",
-          "booking": "todo",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -73,7 +73,7 @@
           "id": "d2h",
           "time": "23:59",
           "text": "🏨 Hotel em Bruxelas (noite 2) — reservar",
-          "booking": "todo",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-10-28T21:28:01.518Z"
+  "updated": "2026-10-28T22:03:20.751Z"
 }
