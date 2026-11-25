@@ -237,7 +237,7 @@
         {
           "id": "d5h",
           "time": "23:59",
-          "text": "🏨 Hotel em Brugges (noite 5) — reservar",
+          "text": "🏨 Hotel em Brugges (noite 5) — APL8 ST-Anna B&B",
           "booking": "booked",
           "hotel": true
         }
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:55:20.010Z"
+  "updated": "2026-11-25T17:55:42.523Z"
 }
