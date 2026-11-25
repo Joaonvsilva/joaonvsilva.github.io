@@ -72,7 +72,7 @@
         {
           "id": "d2h",
           "time": "23:59",
-          "text": "🏨 Hotel em Bruxelas (noite 2) — reservar",
+          "text": "🏨 Hotel em Bruxelas (noite 2) — Bedford Hotels Brussels",
           "booking": "booked",
           "hotel": true
         }
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:54:15.959Z"
+  "updated": "2026-11-25T17:54:32.126Z"
 }
