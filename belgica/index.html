@@ -106,6 +106,23 @@
   .dot{width:12px; height:12px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.15)}
   .dot.bru{background:#b42318} .dot.ant{background:#1f6feb} .dot.brg{background:#1f7a4d}
   .dot.gen{background:#b8860b} .dot.tr{background:#6b7280}
+  /* Food */
+  .foodsec{ background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); margin-bottom:16px; padding:12px 14px; }
+  .foodsec > h2{font-size:15px; margin:0 0 4px; display:flex; align-items:center; gap:8px}
+  .foodsec > .intro{color:var(--muted); font-size:13px; margin:0 0 10px}
+  details.cityfood{border:1px solid var(--line); border-radius:12px; margin:8px 0; overflow:hidden; background:var(--bg)}
+  details.cityfood > summary{cursor:pointer; padding:10px 12px; font-weight:600; list-style:none; display:flex; flex-wrap:wrap; align-items:baseline; gap:8px}
+  details.cityfood > summary::-webkit-details-marker{display:none}
+  details.cityfood > summary::before{content:"▸"; color:var(--muted); font-weight:400}
+  details.cityfood[open] > summary::before{content:"▾"}
+  details.cityfood[open] > summary{border-bottom:1px solid var(--line)}
+  .cityteaser{color:var(--muted); font-weight:400; font-size:12.5px}
+  .tier{padding:4px 12px}
+  .tier h4{margin:8px 0 3px; font-size:13px; letter-spacing:.02em}
+  .t-cheap{color:var(--holly)} .t-mid{color:var(--gold)} .t-high{color:var(--accent2)}
+  .tier ul{margin:0 0 6px; padding-left:18px}
+  .tier li{margin:5px 0; font-size:13.8px; line-height:1.45}
+  .tier li .px{color:var(--muted); font-size:12.3px; white-space:nowrap}
   /* Day card */
   .day{
     background:var(--card); border:1px solid var(--line); border-radius:14px;
@@ -227,6 +244,94 @@
   </section>
 
   <main id="days"></main>
+
+  <section class="foodsec">
+    <h2>🍽️ Comida — por cidade e por orçamento</h2>
+    <p class="intro">Reputações consolidadas (não estrelas extraídas em tempo real) — confirma avaliações e horários na app antes de ir. Para <b>€€€</b>: reserva com semanas de antecedência, confirma encerramentos de fim de ano, e o <b>menu de almoço em dias úteis</b> costuma cortar o preço a metade nas casas estreladas.</p>
+
+    <details class="cityfood">
+      <summary>🟥 Bruxelas <span class="cityteaser">dias 3–4 · frites, marisco em pé, stoofvlees, 2★</span></summary>
+      <div class="tier"><h4 class="t-cheap">€ Barato</h4><ul>
+        <li><b>Maison Antoine</b> (Place Jourdan) — fritkot de referência desde 1948 <span class="px">cone ~€4</span></li>
+        <li><b>Noordzee / Mer du Nord</b> (Sainte-Catherine) — marisco em pé ao balcão <span class="px">~€5–9</span></li>
+        <li><b>Maison Dandoy</b> (balcão take-away) — waffle + speculoos <span class="px">~€4–6</span></li>
+        <li><b>Charli</b> (Dansaert) — melhor padaria p/ pequeno-almoço <span class="px">~€2</span></li>
+        <li><b>Mercado Winter Wonders</b> — glühwein + queijo quente <span class="px">~€4–9</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-mid">€€ Médio</h4><ul>
+        <li><b>Fin de Siècle</b> (Saint-Géry) — stoofvlees/stoemp · só dinheiro, sem reservas <span class="px">~€14–17</span></li>
+        <li><b>Nüetnigenough</b> (perto Grand-Place) — clássicos belgas + cervejas <span class="px">~€15–18</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-high">€€€ Especial</h4><ul>
+        <li><b>La Canne en Ville</b> (Châtelain) — bistronomia; almoço de semana é o melhor valor <span class="px">almoço ~€37–45 · jantar ~€70–90</span></li>
+        <li><b>Bozar</b> (Mont des Arts) — 2★ Michelin; fecha dom/seg <span class="px">degustação ~€95–160</span></li>
+        <li><b>Le Chalet de la Forêt</b> (Uccle) — 2★, o grande splurge; só seg–sex <span class="px">almoço ~€75–100 · jantar ~€160–250</span></li>
+      </ul><p class="intro">Trufas: <b>La Truffe Noire</b> (Ixelles) — época ideal em nov; fecha 21 dez.</p></div>
+    </details>
+
+    <details class="cityfood">
+      <summary>🟦 Antuérpia <span class="cityteaser">dia 5 · frites, pão de passas, Sergio Herman, 3★</span></summary>
+      <div class="tier"><h4 class="t-cheap">€ Barato</h4><ul>
+        <li><b>Frituur No.1</b> (Hoogstraat) — fritkot de referência <span class="px">~€3–4</span></li>
+        <li><b>Goossens</b> (Korte Gasthuisstraat) — pão de passas histórico <span class="px">~€3</span></li>
+        <li><b>Désiré de Lille</b> (perto do Meir) — waffle clássica <span class="px">~€4–6</span></li>
+        <li><b>Beni Falafel</b> (bairro judeu) — falafel, veg · fecha sex tarde–sáb <span class="px">~€6–8</span></li>
+        <li><b>Mercado de Natal</b> (Grote Markt) — smoutebollen <span class="px">~€4–5</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-mid">€€ Médio</h4><ul>
+        <li><b>Bavet</b> (Zuid) — esparguete à vontade de molho <span class="px">~€11–14</span></li>
+        <li><b>De Groote Witte Arend</b> (Reyndersstraat) — stoofvlees em pátio de convento <span class="px">~€16–18</span></li>
+        <li><b>'t Brantyser</b> (Hoogstraat) — clássicos flamengos <span class="px">~€16–18</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-high">€€€ Especial</h4><ul>
+        <li><b>Bar Bulot</b> (Botanic Sanctuary) — brasserie de Sergio Herman, o €€€ mais acessível <span class="px">~€60–90 pp</span></li>
+        <li><b>The Jane</b> (Berchem) — 2★, destino de culto numa capela · esgota com meses <span class="px">degustação ~€190–230</span></li>
+        <li><b>'t Zilte</b> (topo do MAS) — 3★; almoço de semana corta p/ metade <span class="px">almoço ~€95–130 · jantar ~€230–290</span></li>
+      </ul><p class="intro">Também: <b>Le Pristine</b> (Sergio Herman) — à la carte, podes gerir o gasto.</p></div>
+    </details>
+
+    <details class="cityfood">
+      <summary>🟩 Brugges <span class="cityteaser">dias 6–7 · frites, waffle de Liège, pralinés, 2★</span></summary>
+      <div class="tier"><h4 class="t-cheap">€ Barato</h4><ul>
+        <li><b>De Frietketel</b> (Geldmuntstraat) — o melhor fritkot dos locais <span class="px">~€3–5</span></li>
+        <li><b>Chez Albert</b> (Breidelstraat) — waffle de Liège (pede simples) <span class="px">~€3–4</span></li>
+        <li><b>Dumon</b> (Eiermarkt) — pralinés a peso, qualidade real <span class="px">100g ~€3–6</span></li>
+        <li><b>Wintergloed</b> (Markt) — smoutebollen + glühwein <span class="px">~€3–6</span></li>
+        <li><b>'t Brugs Beertje</b> (Kemelstraat) — cervejas + tábua de queijo <span class="px">~€4–7</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-mid">€€ Médio</h4><ul>
+        <li><b>Gran Kaffee De Passage</b> (Dweersstraat) — o jantar flamengo barato, stoofvlees/costela <span class="px">~€14–18</span></li>
+        <li><b>Café Vlissinghe</b> (Blekersstraat) — o pub mais antigo, stoofvlees · fecha seg/ter <span class="px">~€16–18</span></li>
+        <li><b>Bistro de Schaar</b> (Hooistraat) — bom valor junto ao canal · reserva <span class="px">~€16–22</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-high">€€€ Especial</h4><ul>
+        <li><b>Bistro Bruut</b> (à beira-canal) — flamenga moderna; só seg–sex, almoço é o valor <span class="px">almoço ~€45–55 · jantar ~€75–95</span></li>
+        <li><b>Patrick Devos</b> (Zilverstraat) — cozinha vegetal gastronómica (ótimo p/ veg), casa Art Nouveau <span class="px">~€75–95</span></li>
+        <li><b>De Jonkman</b> (fora do centro) — 2★, peixe do Mar do Norte, o topo; qua–sáb <span class="px">almoço ~€85–110 · jantar ~€175–220</span></li>
+      </ul></div>
+    </details>
+
+    <details class="cityfood">
+      <summary>🟨 Gent <span class="cityteaser">dia 8 · sopa, cuberdons, veggie capital</span></summary>
+      <div class="tier"><h4 class="t-cheap">€ Barato</h4><ul>
+        <li><b>Souplounge</b> (junto ao Groentenmarkt) — sopa + pão + fruta + doce <span class="px">~€5–7</span></li>
+        <li><b>Frietketel</b> (Papegaaistraat) — frites, veg-friendly <span class="px">~€3,50–4,50</span></li>
+        <li><b>Himschoot</b> (Groentenmarkt) — padaria histórica, mastellen <span class="px">~€1,50–3</span></li>
+        <li><b>Temmerman + carrinhos</b> (Groentenmarkt) — cuberdons (doce roxo icónico) <span class="px">~€3–5</span></li>
+        <li><b>Overpoort</b> (bairro estudantil) — pita/döner, à noite <span class="px">~€5–8</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-mid">€€ Médio</h4><ul>
+        <li><b>Balls &amp; Glory</b> (Jakobijnenstraat) — balleke + puré, nasceu em Gent · veg disponível <span class="px">~€12–15</span></li>
+        <li><b>Avalon</b> (junto ao Gravensteen) — vegetariano histórico, melhor ao almoço <span class="px">~€13–17</span></li>
+        <li><b>Holy Food Market</b> (perto Vrijdagmarkt) — food hall numa capela, bom p/ grupo <span class="px">~€8–15</span></li>
+      </ul></div>
+      <div class="tier"><h4 class="t-high">€€€ Especial</h4><ul>
+        <li><b>Pakhuis</b> (perto Korenmarkt) — grande brasserie belle-époque, marisco; o €€€ mais fácil de reservar <span class="px">~€60–80 pp</span></li>
+        <li><b>Publiek</b> (sudeste do centro) — fine dining vegetal; almoço de semana é o valor <span class="px">almoço ~€55–70 · jantar ~€90–130</span></li>
+        <li><b>Vrijmoed</b> (Vlaanderenstraat) — a mesa-bandeira de Gent; almoço de semana corta p/ metade <span class="px">almoço ~€65–80 · jantar ~€150–185</span></li>
+      </ul><p class="intro">Também: <b>Oak</b> (perto Ketelvest) — degustação de autor, ~€120–160.</p></div>
+    </details>
+  </section>
 
   <footer>
     Feito com ♥ para a viagem · editável e guardado no GitHub · <span id="foot-updated"></span>
