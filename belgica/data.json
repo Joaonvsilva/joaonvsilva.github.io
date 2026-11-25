@@ -294,8 +294,8 @@
         {
           "id": "d6h",
           "time": "23:59",
-          "text": "🏨 Hotel em Gent (noite 6) — reservar",
-          "booking": "todo",
+          "text": "🏨 Hotel em Gent (noite 6) — Hotel the Lord",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:55:42.523Z"
+  "updated": "2026-11-25T17:56:01.346Z"
 }
