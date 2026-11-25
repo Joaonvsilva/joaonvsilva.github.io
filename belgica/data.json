@@ -129,8 +129,8 @@
         {
           "id": "d3h",
           "time": "23:59",
-          "text": "🏨 Hotel em Antuérpia (noite 3) — reservar",
-          "booking": "todo",
+          "text": "🏨 Hotel em Antuérpia (noite 3) — Roxy Roosevelt",
+          "booking": "booked",
           "hotel": true
         }
       ]
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:54:32.126Z"
+  "updated": "2026-11-25T17:54:49.805Z"
 }
