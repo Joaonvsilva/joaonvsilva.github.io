@@ -27,7 +27,7 @@
         {
           "id": "d1h",
           "time": "23:59",
-          "text": "🏨 Hotel em Bruxelas (noite 1) — reservar",
+          "text": "🏨 Hotel em Bruxelas (noite 1) — Bedford Hotels Brussels",
           "booking": "booked",
           "hotel": true
         }
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:53:44.445Z"
+  "updated": "2026-11-25T17:54:15.959Z"
 }
