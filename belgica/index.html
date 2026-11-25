@@ -106,6 +106,7 @@
   .dot{width:12px; height:12px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.15)}
   .dot.bru{background:#b42318} .dot.ant{background:#1f6feb} .dot.brg{background:#1f7a4d}
   .dot.gen{background:#b8860b} .dot.tr{background:#6b7280}
+  .foodpin{font-size:15px; line-height:20px; text-align:center; filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)); background:none; border:0}
   /* Food */
   .foodsec{ background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); margin-bottom:16px; padding:12px 14px; }
   .foodsec > h2{font-size:15px; margin:0 0 4px; display:flex; align-items:center; gap:8px}
@@ -232,6 +233,7 @@
       <button data-city="antwerp">Antuérpia</button>
       <button data-city="bruges">Brugges</button>
       <button data-city="ghent">Gent</button>
+      <button data-food="1" id="btnFood">🍴 Comida</button>
     </div>
     <div id="map"></div>
     <div class="maplegend">
@@ -240,6 +242,7 @@
       <span><i class="dot brg"></i>Brugges</span>
       <span><i class="dot gen"></i>Gent</span>
       <span><i class="dot tr"></i>Transporte</span>
+      <span>🍴 Comida (ligar/desligar)</span>
     </div>
   </section>
 
@@ -800,9 +803,53 @@ init();
   function showAll(){ map.fitBounds(bounds,{padding:[30,30]}); }
   showAll();
 
+  // --- Food layer (toggleable) ---
+  const FOOD = [
+    // Bruxelas
+    {name:"Maison Antoine", tier:"€", city:"Bruxelas", note:"fritkot de referência · cone ~€4", lat:50.8389, lng:4.3869},
+    {name:"Noordzee / Mer du Nord", tier:"€", city:"Bruxelas", note:"marisco em pé ao balcão ~€5–9", lat:50.8512, lng:4.3468},
+    {name:"Maison Dandoy", tier:"€", city:"Bruxelas", note:"waffle + speculoos (take-away) ~€4–6", lat:50.8476, lng:4.3519},
+    {name:"Fritland", tier:"€", city:"Bruxelas", note:"frites / mitraillette, até tarde", lat:50.8481, lng:4.3497},
+    {name:"Fin de Siècle", tier:"€€", city:"Bruxelas", note:"stoofvlees/stoemp · só dinheiro ~€14–17", lat:50.8484, lng:4.3458},
+    {name:"Bozar", tier:"€€€", city:"Bruxelas", note:"2★ Michelin · menu de almoço", lat:50.8438, lng:4.3589},
+    // Antuérpia
+    {name:"Frituur No.1", tier:"€", city:"Antuérpia", note:"fritkot de referência ~€3–4", lat:51.2206, lng:4.3985},
+    {name:"Goossens", tier:"€", city:"Antuérpia", note:"pão de passas histórico ~€3", lat:51.2178, lng:4.4039},
+    {name:"De Groote Witte Arend", tier:"€€", city:"Antuérpia", note:"stoofvlees em pátio de convento ~€16–18", lat:51.2191, lng:4.3980},
+    {name:"Bavet", tier:"€€", city:"Antuérpia", note:"esparguete à vontade ~€11–14", lat:51.2098, lng:4.3938},
+    {name:"'t Zilte", tier:"€€€", city:"Antuérpia", note:"3★ (topo do MAS) · almoço corta p/ metade", lat:51.2290, lng:4.4056},
+    {name:"The Jane", tier:"€€€", city:"Antuérpia", note:"2★ numa capela · reserva c/ meses", lat:51.1972, lng:4.4245},
+    // Brugges
+    {name:"De Frietketel", tier:"€", city:"Brugges", note:"o melhor fritkot dos locais ~€3–5", lat:51.2088, lng:3.2224},
+    {name:"Chez Albert", tier:"€", city:"Brugges", note:"waffle de Liège ~€3–4", lat:51.2082, lng:3.2262},
+    {name:"Dumon", tier:"€", city:"Brugges", note:"pralinés a peso · 100g ~€3–6", lat:51.2089, lng:3.2244},
+    {name:"Gran Kaffee De Passage", tier:"€€", city:"Brugges", note:"jantar flamengo barato ~€14–18", lat:51.2063, lng:3.2219},
+    {name:"Café Vlissinghe", tier:"€€", city:"Brugges", note:"o pub mais antigo · stoofvlees ~€16–18", lat:51.2112, lng:3.2289},
+    {name:"De Jonkman", tier:"€€€", city:"Brugges", note:"2★ (fora do centro) · almoço de semana", lat:51.2238, lng:3.2585},
+    // Gent
+    {name:"Souplounge", tier:"€", city:"Gent", note:"sopa + pão + fruta + doce ~€5–7", lat:51.0565, lng:3.7245},
+    {name:"Himschoot", tier:"€", city:"Gent", note:"padaria histórica · mastellen ~€1,50–3", lat:51.0556, lng:3.7238},
+    {name:"Temmerman", tier:"€", city:"Gent", note:"cuberdons (doce roxo icónico) ~€3–5", lat:51.0557, lng:3.7236},
+    {name:"Balls & Glory", tier:"€€", city:"Gent", note:"balleke + puré (nasceu em Gent) ~€12–15", lat:51.0533, lng:3.7215},
+    {name:"Avalon", tier:"€€", city:"Gent", note:"vegetariano histórico · almoço ~€13–17", lat:51.0575, lng:3.7205},
+    {name:"Pakhuis", tier:"€€€", city:"Gent", note:"brasserie belle-époque, marisco ~€60–80 pp", lat:51.0533, lng:3.7207},
+    {name:"Vrijmoed", tier:"€€€", city:"Gent", note:"mesa-bandeira · almoço corta p/ metade", lat:51.0505, lng:3.7278},
+  ];
+  const foodLayer = L.layerGroup();
+  FOOD.forEach(f=>{
+    const icon = L.divIcon({className:"foodpin", html:"🍴", iconSize:[20,20], iconAnchor:[10,10]});
+    L.marker([f.lat,f.lng],{icon}).bindPopup("<b>"+f.name+"</b><br>"+f.tier+" · "+f.city+"<br>"+f.note).addTo(foodLayer);
+  });
+  let foodOn = false;
+  document.getElementById("btnFood").addEventListener("click",function(){
+    foodOn = !foodOn;
+    this.classList.toggle("on", foodOn);
+    if(foodOn) foodLayer.addTo(map); else map.removeLayer(foodLayer);
+  });
+
   document.getElementById("mapbtns").addEventListener("click",function(e){
-    const b = e.target.closest("button"); if(!b) return;
-    document.querySelectorAll("#mapbtns button").forEach(x=>x.classList.toggle("on",x===b));
+    const b = e.target.closest("button[data-city]"); if(!b) return;
+    document.querySelectorAll("#mapbtns button[data-city]").forEach(x=>x.classList.toggle("on",x===b));
     const c = b.dataset.city;
     if(c==="all") showAll(); else map.flyTo(CENTER[c],14);
   });
