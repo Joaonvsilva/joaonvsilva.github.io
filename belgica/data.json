@@ -258,7 +258,7 @@
         {
           "id": "d6a2",
           "time": "10:00",
-          "text": "Comboio Brugges → Gent-Sint-Pieters (~25-30 min) · passe SNCB",
+          "text": "Comboio Flixbus Comboio Brugges → Gent-Sint-Pieters (~25-30 min) · passe SNCB",
           "booking": "todo"
         },
         {
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:57:00.669Z"
+  "updated": "2026-11-25T17:57:11.653Z"
 }
