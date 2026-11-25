@@ -93,7 +93,7 @@
         {
           "id": "d3a2",
           "time": "11:30",
-          "text": "Comboio Bruxelas → Antwerpen-Centraal (~45-50 min) · passe SNCB",
+          "text": "Comboio Flixbus Bruxelas → Antwerpen-Centraal  ",
           "booking": "todo"
         },
         {
@@ -339,5 +339,5 @@
       ]
     }
   ],
-  "updated": "2026-11-25T17:56:01.346Z"
+  "updated": "2026-11-25T17:56:43.314Z"
 }
